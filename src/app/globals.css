@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.65rem;
+
+  --background: #f6f4ee;
+  --foreground: #1e2a22;
+
+  --card: #ffffff;
+  --card-foreground: #1e2a22;
+
+  --popover: #ffffff;
+  --popover-foreground: #1e2a22;
+
+  --primary: #2b6a4d;
+  --primary-foreground: #f6f4ee;
+
+  --secondary: #eae4d2;
+  --secondary-foreground: #3a3122;
+
+  --muted: #ece7da;
+  --muted-foreground: #6b6553;
+
+  --accent: #b8863b;
+  --accent-foreground: #2a2115;
+
+  --destructive: #a8442c;
+  --destructive-foreground: #f6f4ee;
+
+  --border: #ddd5bd;
+  --input: #ddd5bd;
+  --ring: #2b6a4d;
+}
+
+.dark {
+  --background: #12241a;
+  --foreground: #eeeade;
+  --card: #16281d;
+  --card-foreground: #eeeade;
+  --popover: #16281d;
+  --popover-foreground: #eeeade;
+  --primary: #6fb894;
+  --primary-foreground: #0c1a12;
+  --secondary: #21382a;
+  --secondary-foreground: #eeeade;
+  --muted: #1c3226;
+  --muted-foreground: #a3ab9b;
+  --accent: #d3a256;
+  --accent-foreground: #241a0a;
+  --destructive: #d97a5f;
+  --destructive-foreground: #1c0f0a;
+  --border: #274434;
+  --input: #274434;
+  --ring: #6fb894;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+}

@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+enum Role {
+  KETUA
+  SEKRETARIS
+  KETUA_GROUP
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+
+  // Only set when role = KETUA_GROUP. One Ketua Group manages exactly one Group.
+  group     Group?   @relation("GroupLeader")
+
+  // Accounts registered by a Ketua (Sekretaris + Ketua Group accounts).
+  // If the Ketua who registered them is deleted, these cascade-delete too.
+  createdById String?
+  createdBy   User?   @relation("CreatedAccounts", fields: [createdById], references: [id], onDelete: Cascade)
+  createdAccounts User[] @relation("CreatedAccounts")
+
+  // History entries only make sense in relation to the Ketua who ran the event,
+  // cascade delete if that Ketua account is removed.
+  historyEntries HistoryEntry[]
+
+  @@index([createdById])
+}
+
+model Group {
+  id        String    @id @default(cuid())
+  name      String
+  isActive  Boolean   @default(true)
+
+  leaderId  String?   @unique
+  leader    User?     @relation("GroupLeader", fields: [leaderId], references: [id], onDelete: Cascade)
+
+  peserta   Peserta[]
+
+  createdAt DateTime  @default(now())
+}
+
+model Panitia {
+  id         String   @id @default(cuid())
+  name       String
+  percentage Float    @default(100)
+  createdAt  DateTime @default(now())
+}
+
+model Peserta {
+  id              String   @id @default(cuid())
+  name            String
+  percentage      Float    @default(100)
+  sudahMenerima   Boolean  @default(false)
+  groupId         String
+  group           Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+
+  @@index([groupId])
+}
+
+// Single row holding the current event's total kg + status.
+model Pengaturan {
+  id       String @id @default("singleton")
+  totalKg  Float  @default(0)
+}
+
+model HistoryEntry {
+  id        String   @id @default(cuid())
+  summary   String
+  createdAt DateTime @default(now())
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+}
